@@ -3,11 +3,14 @@ import dotenv from 'dotenv';
 import connectDB from './config/db';
 import authRoutes from './routes/auth';
 import errorHandler from './middleware/errorHandler';
+import cors from 'cors';
 
 dotenv.config();
 connectDB();
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
