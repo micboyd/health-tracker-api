@@ -1,8 +1,8 @@
 // routes/auth.ts
 import express from 'express';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import User from '../models/User';
+import generateToken from '../utilities/generateToken';
 
 const router = express.Router();
 
@@ -31,15 +31,7 @@ router.post('/register', async (req, res) => {
 
         await user.save();
         
-        const token = jwt.sign(
-            { 
-                userId: user.id 
-            },
-            process.env.JWT_SECRET as string,
-            { 
-                expiresIn: '1h' 
-            }
-        );
+        const token = generateToken(user.id);
 
         res.json({ 
             token, 
@@ -76,15 +68,7 @@ router.post('/login', async (req, res) => {
             msg: 'Incorrect username or password' 
         });
         
-        const token = jwt.sign(
-            { 
-                id: user.id 
-            }, 
-            process.env.JWT_SECRET as string, 
-            { 
-                expiresIn: '1h' 
-            }
-        );
+        const token = generateToken(user.id);
 
         res.json({ 
             token, 
